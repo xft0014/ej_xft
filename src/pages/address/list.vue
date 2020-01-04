@@ -1,87 +1,73 @@
 <template>
-  <div>
-    <!-- 按钮 -->
+    <div>
     <el-button type="success" size="small" @click="toAddHandler">添加</el-button> 
     <el-button type="danger" size="small">批量删除</el-button>
-    <!-- /按钮 -->
-    <!-- 表格 -->
-    <el-table :data="customers">
-      <el-table-column prop="id" label="编号"></el-table-column>
-      <el-table-column prop="province" label="省份"></el-table-column>
-      <el-table-column prop="city" label="城市"></el-table-column>
-      <el-table-column prop="area" label="地区"></el-table-column>
-      <el-table-column prop="address" label="地址"></el-table-column>
-      <el-table-column prop="telephone" label="电话号码"></el-table-column>
-      <el-table-column prop="customerID" label="顾客编号"></el-table-column>
-      <el-table-column label="操作">
-        <template v-slot="slot">
-          <a href="" @click.prevent="toDeleteHandler(slot.row.id)">删除</a>
-          <a href="" @click.prevent="toUpdateHandler(slot.row)">修改</a>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- /表格结束 -->
-    <!-- 分页开始 -->
-    <el-pagination layout="prev, pager, next" :total="50"></el-pagination>
-    <!-- /分页结束 -->
-    <!-- 模态框 -->
-    <el-dialog
-      title="录入顾客信息"
-      :visible.sync="visible"
-      width="60%">
-      <el-form :model="form" label-width="80px">
-        <el-form-item label="编号">
-          <el-input v-model="form.id"></el-input>
-        </el-form-item>
-        <el-form-item label="省份">
-          <el-input  v-model="form.province"></el-input>
-        </el-form-item>
-        <el-form-item label="城市">
-          <el-input v-model="form.city"></el-input>
-        </el-form-item>
-        <el-form-item label="地区">
-          <el-input v-model="form.area"></el-input>
-        </el-form-item>
-        <el-form-item label="地址">
-          <el-input v-model="form.address"></el-input>
-        </el-form-item>
-        <el-form-item label="顾客编号">
-          <el-input v-model="form.customerID"></el-input>
-        </el-form-item>
-        <el-form-item label="电话号">
-          <el-input v-model="form.telephone"></el-input>
-        </el-form-item>
-      </el-form>
+    <el-table :data="addresses">
+            <el-table-column  prop="id" label="编号"></el-table-column>
+            <el-table-column prop="province" label="省份"></el-table-column>
+            <el-table-column prop="city" label="城市"></el-table-column>
+            <el-table-column prop="area" label="区"></el-table-column>
+            <el-table-column prop="address" label="地址"></el-table-column>
+            <el-table-column prop="telephone" label="联系方式"></el-table-column>
+            <el-table-column prop="customerId" label="顾客号"></el-table-column>
+            <el-table-column label="操作">
+                <template v-slot="slot">
+                    <a href="" @click.prevent="toDeleteHandler(slot.row.id)">删除</a>
+                    <a href="" @click.prevent="toUpdateHandler(slot.row)">修改</a>
+                </template>
+            </el-table-column>
 
-      <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="closeModalHandler">取 消</el-button>
-        <el-button size="small" type="primary" @click="submitHandler">确 定</el-button>
-      </span>
-    </el-dialog>
-    <!-- /模态框 -->
-
-  </div>
+        </el-table>
+        <el-pagination layout="prev, pager, next" :total="50"></el-pagination>
+        <el-dialog title="录入地址信息" :visible.sync="visible" width="60%" >
+         <span>
+           
+             <el-form :model="from" label-width=80px>
+                <el-form-item label="省份">
+                    <!-- v-model双向数据绑定 -->
+                    <el-input v-model="form.province">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="城市">
+                    <el-input v-model="form.city"></el-input>
+                </el-form-item>
+                <el-form-item label="区">
+                    <el-input  v-model="form.area"></el-input>
+                </el-form-item>
+                <el-form-item label="地址">
+                    <el-input  v-model="form.address"></el-input>
+                </el-form-item>
+                <el-form-item label="联系方式">
+                    <el-input  v-model="form.telephone"></el-input>
+                </el-form-item>
+                
+             </el-form>
+             </span>
+         <span slot="footer" class="dialog-footer">
+         <el-button @click="visible = false">取 消</el-button>
+         <!-- @click=onclick -->
+         <el-button type="primary" @click="submitHandler">确 定</el-button>
+         </span>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
 import request from '@/utils/request'
 import querystring from 'querystring'
+//暴露接口
 export default {
-  // 用于存放网页中需要调用的方法
+    // 存放网页中需要调用的方法
   methods:{
-    loadData(){
+        loadData(){
       let url="http://localhost:6677/address/findAll"
       request.get(url).then((response)=>{
         // 将查询结果设置到customers中，this指向外部函数的this
-        this.customers = response.data;
+        this.addresses = response.data;
       })
     },
     submitHandler(){
-      //this.form 对象 ---字符串--> 后台 {type:'customer',age:12}
-      // json字符串 '{"type":"customer","age":12}'
-      // request.post(url,this.form)
-      // 查询字符串 type=customer&age=12
-      // 通过request与后台进行交互，并且要携带参数
+  
       let url = "http://localhost:6677/address/saveOrUpdate";
       request({
         url,
@@ -103,62 +89,65 @@ export default {
       })
 
     },
-toDeleteHandler(id){
+    toDeleteHandler(id){
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         let url="http://localhost:6677/address/deleteById?id="+id;
+        // let that=this;
         request.get(url).then((response)=>{
-          //刷新数据
-          this.loadData();
-          //提示结束
-          this.$message({
-            type: 'success',
-            message: response.message+id
-        }); 
+            this.loadData();
         })
-       
+        this.$message({
+        type: 'success',
+        message: response.message
+        });
       })
       
     },
-    
     toUpdateHandler(row){
-      //模态框表单中显示当前信息
-      this.form=row;
       this.visible = true;
+      this.form=row;
     },
     closeModalHandler(){
       this.visible = false;
     },
     toAddHandler(){
-      //将form变为初始值
+      this.visible = true;
       this.form={
         type:"address"
       }
-      this.visible = true;
+
     }
+
   },
   // 用于存放要向网页中显示的数据
-  data(){
-    return {
-      visible:false,
-      customers:[],
-      form:{
-        type:"address"
-      }
-    }
-  },
-  created(){
-    // this为当前vue实例对象
-    // vue实例创建完毕 
-    this.loadData()
+    //用于存放要在网页中存放的数据
+    data(){
+        return {
+            form:{
+                type:"address"
+            },
+            visible:false,
+            addresses:[]
+        }
 
-  }
+    },
+    created(){
+        let url="http://localhost:6677/address/findAll"
+        // let that = this
+        request.get(url).then((response)=>{
+            //将查询结果设置到customers中
+            this.addresses = response.data;
+        })
+        this.loadData()
+        
+    }
+
 }
 </script>
-
 <style scoped>
- 
+       
 </style>
