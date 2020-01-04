@@ -21,11 +21,8 @@
          <el-dialog :title="title" :visible.sync="visible" width="60%" >
         <el-form :model="form" label-width="80px">
            
-            <el-form-item label="编号">
-                <el-input v-model="form.id"></el-input>
-            </el-form-item>
             <el-form-item label="评论内容">
-                <el-input v-model="form.content"></el-input>
+                <el-input text="textarea" v-model="form.content"></el-input>
             </el-form-item>
             <el-form-item label="评论时间">
                 <el-input v-model="form.commentTime"></el-input>
@@ -58,7 +55,7 @@ export default {
           },
           data: querystring.stringify(this.form)
           }).then((response)=>{
-              this.closeModalHandler;
+              this.closeModalHandler();
               this.loadData();
               this.$message({
                   type:"success",
@@ -66,7 +63,7 @@ export default {
               })
               
           })
-          this.visible=false
+             this.visible=false      
         },
         loadData(){
           let url = "http://localhost:6677/comment/findAll"
@@ -78,7 +75,7 @@ export default {
         this.$confirm('此操作将永久删除该评论, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
+          type: 'warning'  
         }).then(() => {
             let url="http://localhost:6677/comment/deleteById?id="+id;
             request.get(url).then((response)=>{
@@ -110,7 +107,6 @@ export default {
     },
     data(){
         return {
-            title:"录入评论",
             visible:false,
             comments:[],
             form:{
