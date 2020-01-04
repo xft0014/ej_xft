@@ -91,7 +91,7 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/product',
+    path: '/address',
     component: Layout,
     children: [
       {
