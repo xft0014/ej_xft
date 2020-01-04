@@ -11,6 +11,7 @@
             <el-table-column fixed="right" label="操作">               
                 <template v-slot="slot">
                     <a href="" @click.prevent="toDeleteHandler(slot.row.id)">删除</a>
+                    <a href="" @click.prevent="toUpdateHandler(slot.row)">修改</a>
                 </template>
             </el-table-column>
 
@@ -90,6 +91,11 @@ export default {
         
         })
         
+        },
+        toUpdateHandler(row){
+            this.title="修改评论";
+            this.form=row;
+            this.visible=true;
         },
         closeModalHandler(){
             this.visible=false;
