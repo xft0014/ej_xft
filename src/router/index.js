@@ -90,6 +90,54 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/product',
+    component: Layout,
+    children: [
+      {
+        path: 'list',
+        name: 'AddresstList',
+        component: () => import('@/pages/address/list'),
+        meta: { title: '地址管理', icon: 'user' }
+      }
+    ]
+  },
+  {
+    path: '/category',
+    component: Layout,
+    children: [
+      {
+        path: 'list',
+        name: 'CategoryList',
+        component: () => import('@/pages/category/list'),
+        meta: { title: '栏目管理', icon: 'user' }
+      }
+    ]
+  },
+  {
+    path: '/comment',
+    component: Layout,
+    children: [
+      {
+        path: 'list',
+        name: 'CommentList',
+        component: () => import('@/pages/comment/list'),
+        meta: { title: '评论管理', icon: 'user' }
+      }
+    ]
+  },
+  {
+    path: '/order',
+    component: Layout,
+    children: [
+      {
+        path: 'list',
+        name: 'OrderList',
+        component: () => import('@/pages/order/list'),
+        meta: { title: '订单管理', icon: 'user' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
