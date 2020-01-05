@@ -6,12 +6,13 @@
     <!-- /按钮 -->
     <!-- 表格 -->
     <el-table :data="products">
-      <el-table-column prop="id" label="编号"></el-table-column>
-      <el-table-column prop="name" label="产品名称"></el-table-column>
-      <el-table-column prop="price" label="单价"></el-table-column>
-      <el-table-column prop="description" label="描述"></el-table-column>
-      <el-table-column prop="categoryId" label="所属分类"></el-table-column>
-      <el-table-column label="操作">
+    <el-table-column  prop="id" label=编号></el-table-column>
+    <el-table-column  prop="name" width="200px" label=产品名称></el-table-column>
+    <el-table-column  prop="price" label=价格></el-table-column>
+    <el-table-column  prop="description" width="200px" label=描述></el-table-column>
+    <el-table-column prop="categoryId"  width="200px" label=所属产品></el-table-column>
+      <el-table-column prop="photo"  label=照片 width="650px"></el-table-column>
+      <el-table-column label="操作" fixed="right">
         <template v-slot="slot">
           <a href="" @click.prevent="toDeleteHandler(slot.row.id)">删除</a>
           <a href="" @click.prevent="toUpdateHandler(slot.row)">修改</a>
@@ -48,6 +49,17 @@
         <el-form-item label="描述">
           <el-input type="textarea" v-model="form.description"></el-input>
         </el-form-item>
+              <el-form-item label="图片">
+            <el-upload
+            class="upload-demo"
+            action="https://134.175.154.93:6677/file/upload/"
+            :file-list="fileList"
+            :on-success="uploadSuccessHandler"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+      </el-form-item>
       </el-form>
 
       <span slot="footer" class="dialog-footer">
@@ -66,6 +78,12 @@ import querystring from 'querystring'
 export default {
   // 用于存放网页中需要调用的方法
   methods:{
+      //上传成功的事件处理函数
+  uploadSuccessHandler(response){
+    let photo="http://134.175.154.93:8888/group1/"+response.data.id
+    //将图片地址设置到form中一起提交给后台
+     this.form.photo = photo;
+  },
     loadCategory(){
       let url = "http://localhost:6677/category/findAll"
       request.get(url).then((response)=>{
@@ -148,7 +166,8 @@ export default {
       visible:false,
       products:[],
       options:[],
-      form:{}
+      form:{},
+      fileList:[]
     }
   },
   created(){
