@@ -52,7 +52,7 @@
               <el-form-item label="图片">
             <el-upload
             class="upload-demo"
-            action="https://134.175.154.93:6677/file/upload/"
+            action="http://134.175.154.93:6677/file/upload/"
             :file-list="fileList"
             :on-success="uploadSuccessHandler"
             list-type="picture">
